@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Kalkulator Standar - Tugas Web 1</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background: #ff6b6b;
+            font-family: 'Arial Black', 'Impact', 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .kalkulator {
+            max-width: 380px;
+            width: 100%;
+            background: #fff;
+            border: 5px solid #000;
+            box-shadow: 14px 14px 0px 0px #000;
+            padding: 24px 20px 28px;
+        }
+
+        .judul {
+            color: #000;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .layar {
+            background: #f0f0f0;
+            border: 4px solid #000;
+            padding: 20px 18px 16px;
+            margin-bottom: 20px;
+            text-align: right;
+            min-height: 90px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .layar-ekspresi {
+            font-size: 0.9rem;
+            color: #555;
+            font-family: 'Courier New', monospace;
+            min-height: 18px;
+            margin-bottom: 4px;
+            word-break: break-all;
+            font-weight: bold;
+        }
+
+        .layar-hasil {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #000;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+            word-break: break-all;
+            line-height: 1.1;
+        }
+
+        .tombol-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .btn {
+            background: #e0e0e0;
+            border: 3px solid #000;
+            padding: 18px 0;
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.05s;
+            color: #000;
+            font-family: inherit;
+            box-shadow: 4px 4px 0px 0px #000;
+        }
+
+        .btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px #000;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-angka {
+            background: #fff;
+            color: #000;
+        }
+
+        .btn-angka:hover {
+            background: #e6ffe6;
+        }
+
+        .btn-operator {
+            background: #ffd93d;
+            color: #000;
+        }
+
+        .btn-operator:hover {
+            background: #f0c800;
+        }
+
+        .btn-fungsi {
+            background: #ff6b6b;
+            color: #000;
+        }
+
+        .btn-fungsi:hover {
+            background: #ff4444;
+        }
+
+        .btn-sama {
+            background: #00e5a0;
+            color: #000;
+            font-weight: 900;
+            font-size: 1.5rem;
+            box-shadow: 4px 4px 0px 0px #000;
+        }
+
+        .btn-sama:hover {
+            background: #00cc8f;
+        }
+
+        .btn-lebar {
+            grid-column: span 2;
+        }
+
+        .credit {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 0.68rem;
+            color: #333;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        @media (max-width: 420px) {
+            .kalkulator {
+                padding: 18px 14px 22px;
+            }
+            .btn {
+                padding: 14px 0;
+                font-size: 1.1rem;
+            }
+            .layar-hasil {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="kalkulator">
+    <div class="judul">Kalkulator</div>
+
+    <div class="layar">
+        <div class="layar-ekspresi" id="displayEkspresi"></div>
+        <div class="layar-hasil" id="display">0</div>
+    </div>
+
+    <div class="tombol-grid" id="tombolContainer">
+        <!-- baris 1 -->
+        <div class="btn btn-fungsi" data-action="clear">C</div>
+        <div class="btn btn-fungsi" data-action="backspace">⌫</div>
+        <div class="btn btn-operator" data-op="/">÷</div>
+        <div class="btn btn-operator" data-op="*">×</div>
+
+        <!-- baris 2 -->
+        <div class="btn btn-angka" data-num="7">7</div>
+        <div class="btn btn-angka" data-num="8">8</div>
+        <div class="btn btn-angka" data-num="9">9</div>
+        <div class="btn btn-operator" data-op="-">−</div>
+
+        <!-- baris 3 -->
+        <div class="btn btn-angka" data-num="4">4</div>
+        <div class="btn btn-angka" data-num="5">5</div>
+        <div class="btn btn-angka" data-num="6">6</div>
+        <div class="btn btn-operator" data-op="+">+</div>
+
+        <!-- baris 4 -->
+        <div class="btn btn-angka" data-num="1">1</div>
+        <div class="btn btn-angka" data-num="2">2</div>
+        <div class="btn btn-angka" data-num="3">3</div>
+        <div class="btn btn-sama" data-action="equal">=</div>
+
+        <!-- baris 5 -->
+        <div class="btn btn-angka btn-lebar" data-num="0">0</div>
+        <div class="btn btn-angka" data-num=".">.</div>
+        <div style="visibility:hidden;"></div>
+    </div>
+
+    <div class="credit">[ tugas pemrograman web 1 - Reva Azmi - kalkulator ]</div>
+</div>
+
+<script>
+    // ---------- state kalkulator ----------
+    let currentExpression = "";
+    let lastResultMode = false;
+    let lastErrorFlag = false;
+
+    const displayDiv     = document.getElementById("display");
+    const displayEkspresi = document.getElementById("displayEkspresi");
+
+    // ----- update tampilan utama -----
+    function updateDisplay() {
+        if (currentExpression === "") {
+            displayDiv.innerText = "0";
+            displayEkspresi.innerText = "";
+        } else {
+            let showExpr = currentExpression;
+            if (showExpr.length > 28) {
+                showExpr = "..." + showExpr.slice(-25);
+            }
+            displayDiv.innerText = showExpr;
+        }
+    }
+
+    // ----- reset total -----
+    function clearAll() {
+        currentExpression = "";
+        lastResultMode = false;
+        lastErrorFlag = false;
+        displayEkspresi.innerText = "";
+        updateDisplay();
+    }
+
+    // ----- hapus 1 karakter (backspace) -----
+    function handleBackspace() {
+        if (lastResultMode) {
+            clearAll();
+            return;
+        }
+        if (currentExpression.length > 0) {
+            currentExpression = currentExpression.slice(0, -1);
+        }
+        updateDisplay();
+        lastErrorFlag = false;
+    }
+
+    // ----- evaluasi ekspresi dengan aman -----
+    function evaluateExpression(expr) {
+        let cleanExpr = expr.trim();
+        if (cleanExpr === "") return null;
+
+        const allowedPattern = /^[0-9+\-*/.]+$/;
+        if (!allowedPattern.test(cleanExpr)) return null;
+        if (/[+\-*/]$/.test(cleanExpr)) return null;
+
+        try {
+            const result = Function('"use strict";return (' + cleanExpr + ')')();
+            if (!isFinite(result)) return null;
+            if (typeof result === 'number' && !Number.isInteger(result)) {
+                return parseFloat(result.toFixed(10));
+            }
+            return result;
+        } catch (e) {
+            console.warn("Eval error:", e);
+            return null;
+        }
+    }
+
+    // ----- proses tombol sama dengan (=) -----
+    function handleEqual() {
+        if (lastErrorFlag) { clearAll(); return; }
+        if (currentExpression === "") return;
+
+        let exprToEval = currentExpression;
+        if (/[+\-*/]$/.test(exprToEval)) {
+            exprToEval = exprToEval.slice(0, -1);
+            if (exprToEval === "") return;
+        }
+
+        // tampilkan ekspresi di baris atas sebelum hasil
+        displayEkspresi.innerText = exprToEval + " =";
+
+        const hasil = evaluateExpression(exprToEval);
+        if (hasil === null) {
+            displayDiv.innerText = "Error";
+            currentExpression = "";
+            lastResultMode = true;
+            lastErrorFlag = true;
+            return;
+        }
+
+        let hasilString = Number.isInteger(hasil)
+            ? hasil.toString()
+            : parseFloat(hasil.toFixed(10)).toString();
+
+        currentExpression = hasilString;
+        lastResultMode = true;
+        lastErrorFlag = false;
+        displayDiv.innerText = hasilString;
+    }
+
+    // ----- tambah angka / titik -----
+    function appendNumber(numberStr) {
+        if (lastErrorFlag) { clearAll(); lastErrorFlag = false; }
+        if (lastResultMode) {
+            currentExpression = "";
+            lastResultMode = false;
+            displayEkspresi.innerText = "";
+        }
+
+        if (numberStr === ".") {
+            const lastToken = getLastNumber(currentExpression);
+            if (lastToken.includes(".")) return;
+            if (currentExpression === "") { currentExpression = "0."; updateDisplay(); return; }
+            if (/[+\-*/]$/.test(currentExpression)) { currentExpression += "0."; updateDisplay(); return; }
+        }
+
+        if (numberStr !== ".") {
+            if (currentExpression === "0") { currentExpression = numberStr; updateDisplay(); return; }
+            if (currentExpression === "" && numberStr === "0") { currentExpression = "0"; updateDisplay(); return; }
+        }
+
+        currentExpression += numberStr;
+        updateDisplay();
+    }
+
+    // helper: ambil angka terakhir dari ekspresi
+    function getLastNumber(expr) {
+        if (expr === "") return "";
+        let lastIdx = -1;
+        for (let i = expr.length - 1; i >= 0; i--) {
+            if (/[+\-*/]/.test(expr[i])) { lastIdx = i; break; }
+        }
+        return lastIdx === -1 ? expr : expr.slice(lastIdx + 1);
+    }
+
+    // ----- tambah operator -----
+    function appendOperator(op) {
+        if (lastErrorFlag) { clearAll(); lastErrorFlag = false; }
+
+        if (lastResultMode) {
+            lastResultMode = false;
+            if (currentExpression !== "" && !isNaN(parseFloat(currentExpression))) {
+                currentExpression += op;
+                displayEkspresi.innerText = "";
+                updateDisplay();
+                return;
+            } else {
+                currentExpression = "0" + op;
+                updateDisplay();
+                return;
+            }
+        }
+
+        if (currentExpression === "") {
+            currentExpression = "0" + op;
+            updateDisplay();
+            return;
+        }
+
+        const lastChar = currentExpression[currentExpression.length - 1];
+        if (['+', '-', '*', '/'].includes(lastChar)) {
+            currentExpression = currentExpression.slice(0, -1) + op;
+            updateDisplay();
+            return;
+        }
+
+        currentExpression += op;
+        updateDisplay();
+    }
+
+    // ----- event handler tombol (delegasi) -----
+    function onTombolClick(e) {
+        let target = e.target;
+        if (!target.classList || !target.classList.contains("btn")) return;
+
+        const numVal = target.getAttribute("data-num");
+        if (numVal !== null) { appendNumber(numVal); return; }
+
+        const opVal = target.getAttribute("data-op");
+        if (opVal !== null) {
+            let realOp = opVal;
+            if (opVal === "×") realOp = "*";
+            if (opVal === "÷") realOp = "/";
+            appendOperator(realOp);
+            return;
+        }
+
+        const action = target.getAttribute("data-action");
+        if (action === "clear")     clearAll();
+        else if (action === "backspace") handleBackspace();
+        else if (action === "equal")     handleEqual();
+    }
+
+    document.getElementById("tombolContainer").addEventListener("click", onTombolClick);
+
+    // ----- shortcut keyboard -----
+    function handleKeyboard(event) {
+        const key = event.key;
+        if (/[0-9]/.test(key))          { event.preventDefault(); appendNumber(key); }
+        else if (key === ".")            { event.preventDefault(); appendNumber("."); }
+        else if (key === "+")            { event.preventDefault(); appendOperator("+"); }
+        else if (key === "-")            { event.preventDefault(); appendOperator("-"); }
+        else if (key === "*")            { event.preventDefault(); appendOperator("*"); }
+        else if (key === "/")            { event.preventDefault(); appendOperator("/"); }
+        else if (key === "Enter" || key === "=") { event.preventDefault(); handleEqual(); }
+        else if (key === "Backspace")    { event.preventDefault(); handleBackspace(); }
+        else if (key === "Escape" || key === "Delete" || key === "c" || key === "C") {
+            event.preventDefault(); clearAll();
+        }
+    }
+
+    window.addEventListener("keydown", handleKeyboard);
+
+    // inisialisasi
+    clearAll();
+</script>
+</body>
+</html>
