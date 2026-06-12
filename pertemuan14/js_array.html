@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARRAY</title>
+</head>
+<body>
+    <div id="output"></div>
+    <script>
+        function log(msg) {
+            document.getElementById('output').innerHTML += msg + '<br>';
+        }
+
+        //array number
+        let arr = [1, 2, 3, 4, 5];
+        log('arr = [' + arr.join(', ') + ']');
+        //array string
+        let arr2 = ["a", "b", "c", "d", "e"];
+        log('arr2 = [' + arr2.join(', ') + ']');
+        //array mix
+        let arr3 = [1, "a", true, null, undefined];
+        log('arr3 = [' + arr3.join(', ') + ']');
+        //accesing array index
+        log('arr[0] = ' + arr[0]);
+        log('arr2[1] = ' + arr2[1]);
+        log('arr3[2] = ' + arr3[2]);
+
+        //accesing array length
+        log('arr.length = ' + arr.length);
+        log('arr2.length = ' + arr2.length);
+        log('arr3.length = ' + arr3.length);
+        //dengan looping
+        for (let i = 0; i < arr.length; i++) {
+            log('arr[' + i + '] = ' + arr[i]);
+        }
+    </script>
+</body>
+</html>

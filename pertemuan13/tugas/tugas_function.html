@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Arial Black', 'Impact', 'Arial', sans-serif;
+        }
+
+        body {
+            background: #ffdd57;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            background-color: #ffffff;
+            max-width: 560px;
+            width: 100%;
+            border: 5px solid #000;
+            box-shadow: 12px 12px 0px 0px #000;
+            padding: 2rem 2.2rem 2.2rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-top: 0;
+            margin-bottom: 0.4rem;
+            color: #000;
+            border-left: 8px solid #ff0040;
+            padding-left: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sub {
+            color: #333;
+            font-size: 0.9rem;
+            margin-bottom: 1.4rem;
+            border-bottom: 3px solid #000;
+            padding-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .info-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #e6e6e6;
+            border: 3px solid #000;
+            padding: 0.8rem 1.2rem;
+            margin-bottom: 1.4rem;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .soal-badge {
+            background: #000;
+            color: #fff;
+            padding: 5px 14px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border: 2px solid #000;
+        }
+
+        .skor-badge {
+            background: #00e5a0;
+            color: #000;
+            padding: 5px 14px;
+            font-weight: 700;
+            font-size: 1rem;
+            border: 2px solid #000;
+        }
+
+        .soal-box {
+            background: #fff;
+            border: 4px solid #000;
+            padding: 1.2rem 1.4rem;
+            margin-bottom: 1.2rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #000;
+            min-height: 70px;
+            box-shadow: 6px 6px 0px 0px #000;
+        }
+
+        .pilihan-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 1.3rem;
+        }
+
+        .pilihan-btn {
+            background: #f0f0f0;
+            border: 3px solid #000;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: left;
+            transition: 0.05s;
+            color: #000;
+            box-shadow: 4px 4px 0px 0px #000;
+        }
+
+        .pilihan-btn:hover:not(:disabled) {
+            background: #bae6fd;
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px #000;
+        }
+
+        .pilihan-btn:active:not(:disabled) {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px #000;
+        }
+
+        .pilihan-btn.benar {
+            background: #00e5a0;
+            border-color: #000;
+            color: #000;
+        }
+
+        .pilihan-btn.salah {
+            background: #ff4757;
+            border-color: #000;
+            color: #000;
+        }
+
+        .pilihan-btn:disabled {
+            cursor: default;
+            opacity: 0.8;
+        }
+
+        .feedback-box {
+            background: #fff;
+            border: 3px solid #000;
+            padding: 0.9rem 1.1rem;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #000;
+            margin-bottom: 1.2rem;
+            text-align: center;
+            box-shadow: 4px 4px 0px 0px #000;
+        }
+
+        .btn-next {
+            width: 100%;
+            background: #0040ff;
+            border: 4px solid #000;
+            padding: 13px 0;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            transition: 0.05s;
+            box-shadow: 6px 6px 0px 0px #000;
+        }
+
+        .btn-next:hover:not(:disabled) {
+            background: #0033cc;
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0px 0px #000;
+        }
+
+        .btn-next:active:not(:disabled) {
+            transform: translate(2px, 2px);
+            box-shadow: 4px 4px 0px 0px #000;
+        }
+
+        .btn-next:disabled {
+            background: #ccc;
+            color: #666;
+            cursor: default;
+            transform: none;
+            box-shadow: 4px 4px 0px 0px #666;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #555;
+            margin-top: 1.4rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Quiz Pengetahuan</h1>
+        <div class="sub">Jawab pertanyaan di bawah ini dengan benar!</div>
+
+        <div class="info-panel">
+            <div>Soal : <span class="soal-badge" id="soalCount">1 / 5</span></div>
+            <div>Skor : <span class="skor-badge" id="skorDisplay">0</span></div>
+        </div>
+
+        <div class="soal-box" id="soalBox">Memuat soal...</div>
+
+        <div class="pilihan-list" id="pilihanList"></div>
+
+        <div class="feedback-box" id="feedbackBox">Pilih salah satu jawaban di atas.</div>
+
+        <button class="btn-next" id="btnNext" disabled>Soal Berikutnya</button>
+
+        <footer>[ tugas pemrograman web 1 - Reva Azmi - function kompleks ]</footer>
+    </div>
+
+    <script>
+        // function kompleks
+
+        // --------------------- DATA SOAL ---------------------
+        const daftarSoal = [
+            {
+                pertanyaan: "Apa ibukota negara Jepang?",
+                pilihan: ["Seoul", "Beijing", "Tokyo", "Bangkok"],
+                jawaban: 2
+            },
+            {
+                pertanyaan: "Planet terbesar di tata surya kita adalah?",
+                pilihan: ["Saturnus", "Jupiter", "Uranus", "Neptunus"],
+                jawaban: 1
+            },
+            {
+                pertanyaan: "Siapakah penemu bola lampu listrik?",
+                pilihan: ["Nikola Tesla", "Albert Einstein", "Thomas Edison", "Isaac Newton"],
+                jawaban: 2
+            },
+            {
+                pertanyaan: "Bahasa pemrograman apa yang digunakan untuk membuat halaman web interaktif?",
+                pilihan: ["Python", "JavaScript", "Java", "C++"],
+                jawaban: 1
+            },
+            {
+                pertanyaan: "Berapa hasil dari 7 × 8?",
+                pilihan: ["54", "56", "48", "64"],
+                jawaban: 1
+            }
+        ];
+
+        // --------------------- VARIABEL STATE ---------------------
+        let soalSekarang = 0;
+        let skor = 0;
+        let sudahJawab = false;
+
+        // DOM elements
+        const soalBox     = document.getElementById('soalBox');
+        const pilihanList = document.getElementById('pilihanList');
+        const feedbackBox = document.getElementById('feedbackBox');
+        const btnNext     = document.getElementById('btnNext');
+        const soalCount   = document.getElementById('soalCount');
+        const skorDisplay = document.getElementById('skorDisplay');
+
+        // --------------------- FUNGSI UTAMA ---------------------
+
+        // 1. Mendapatkan total jumlah soal
+        function getTotalSoal() {
+            return daftarSoal.length;
+        }
+
+        // 2. Mendapatkan data soal berdasarkan index
+        function getSoal(index) {
+            if (index < 0 || index >= getTotalSoal()) return null;
+            return daftarSoal[index];
+        }
+
+        // 3. Memperbarui tampilan header soal (nomor & skor)
+        function updateHeader() {
+            soalCount.textContent = (soalSekarang + 1) + " / " + getTotalSoal();
+            skorDisplay.textContent = skor;
+        }
+
+        // 4. Membuat tombol pilihan jawaban secara dinamis
+        function buatTombolPilihan(soal) {
+            pilihanList.innerHTML = '';
+            soal.pilihan.forEach(function(teks, idx) {
+                const btn = document.createElement('button');
+                btn.className = 'pilihan-btn';
+                btn.textContent = String.fromCharCode(65 + idx) + ". " + teks;
+                btn.addEventListener('click', function() {
+                    prosesJawaban(idx, soal.jawaban);
+                });
+                pilihanList.appendChild(btn);
+            });
+        }
+
+        // 5. Menampilkan soal ke layar
+        function tampilkanSoal(index) {
+            const soal = getSoal(index);
+            if (!soal) return;
+
+            sudahJawab = false;
+            soalBox.textContent = (index + 1) + ". " + soal.pertanyaan;
+            buatTombolPilihan(soal);
+            setFeedback("Pilih salah satu jawaban di atas.", "#1e293b");
+            btnNext.disabled = true;
+            updateHeader();
+        }
+
+        // 6. Memproses jawaban yang dipilih user
+        function prosesJawaban(indexDipilih, indexBenar) {
+            if (sudahJawab) return;
+            sudahJawab = true;
+
+            const tombolSemua = pilihanList.querySelectorAll('.pilihan-btn');
+
+            // tandai semua tombol sebagai disabled
+            tombolSemua.forEach(function(btn) {
+                btn.disabled = true;
+            });
+
+            if (indexDipilih === indexBenar) {
+                skor++;
+                tombolSemua[indexDipilih].classList.add('benar');
+                setFeedback("[BENAR] Jawaban benar!", "#15803d");
+            } else {
+                tombolSemua[indexDipilih].classList.add('salah');
+                tombolSemua[indexBenar].classList.add('benar');
+                setFeedback("[SALAH] Jawaban yang benar: " + String.fromCharCode(65 + indexBenar), "#b91c1c");
+            }
+
+            updateHeader();
+            btnNext.disabled = false;
+
+            // ubah label tombol jika soal terakhir
+            if (soalSekarang === getTotalSoal() - 1) {
+                btnNext.textContent = "Lihat Hasil";
+            }
+        }
+
+        // 7. Menampilkan pesan feedback (dengan warna teks)
+        function setFeedback(pesan, warna) {
+            feedbackBox.innerHTML = pesan;
+            feedbackBox.style.color = warna || "#1e293b";
+        }
+
+        // 8. Menampilkan layar hasil akhir quiz
+        function tampilkanHasil() {
+            const total = getTotalSoal();
+            const persen = Math.round((skor / total) * 100);
+
+            let label = "Coba lagi ya!";
+            if (persen === 100) { label = "Sempurna!"; }
+            else if (persen >= 80) { label = "Hebat!"; }
+            else if (persen >= 60) { label = "Lumayan bagus!"; }
+            else if (persen >= 40) { label = "Perlu belajar lagi."; }
+
+            soalBox.innerHTML = `
+                <div style="text-align:center; font-size:1.5rem; font-weight:bold;">SKOR AKHIR</div>
+                <div style="text-align:center; margin-top:8px;"><strong>${skor} / ${total}</strong> (${persen}%)</div>
+                <div style="text-align:center; color:#475569; margin-top:4px;">${label}</div>
+            `;
+            pilihanList.innerHTML = '';
+            feedbackBox.style.display = 'none';
+            btnNext.textContent = "Main Lagi";
+            btnNext.disabled = false;
+            btnNext.onclick = function() { ulangQuiz(); };
+        }
+
+        // 9. Reset quiz dari awal
+        function ulangQuiz() {
+            soalSekarang = 0;
+            skor = 0;
+            sudahJawab = false;
+            feedbackBox.style.display = '';
+            btnNext.textContent = "Soal Berikutnya →";
+            btnNext.onclick = null;
+            tampilkanSoal(soalSekarang);
+        }
+
+        // --------------------- EVENT LISTENER ---------------------
+        btnNext.addEventListener('click', function() {
+            soalSekarang++;
+            if (soalSekarang < getTotalSoal()) {
+                tampilkanSoal(soalSekarang);
+            } else {
+                tampilkanHasil();
+            }
+        });
+
+        // --------------------- MULAI QUIZ ---------------------
+        tampilkanSoal(soalSekarang);
+    </script>
+</body>
+</html>
