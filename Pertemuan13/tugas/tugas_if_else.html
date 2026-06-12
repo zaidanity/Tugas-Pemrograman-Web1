@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1 style="color: darkgreen; text-align: center; font-family: Arial, sans-serif;">TUGAS IF ELSE KOMPLEKS PEMROGRAMAN WEB 1 - PERTEMUAN 13</h1>
+    <script>
+        /**
+         * MIND MAPPING ALGORITMA IF ELSE
+         * 1. define variabel gajiPerBulan = 5000000
+         * 2. define variabel jumlahPinjaman = 20000000
+         * 3. define variabel skorKredit = 720
+         * 4. define variabel sudahPunyaUtang = false
+         * 5. IF1: jika gajiPerBulan >= 3000000, lanjut cek syarat lainnya
+         *      - IF2: jika skorKredit >= 700
+         *          - IF3: jika sudahPunyaUtang = false, tampilkan "Pinjaman disetujui"
+         *          - ELSE: tampilkan "Ditolak: masih memiliki utang aktif"
+         *      - ELSE IF: jika skorKredit >= 500, tampilkan "Pinjaman disetujui dengan bunga lebih tinggi"
+         *      - ELSE: tampilkan "Ditolak: skor kredit terlalu rendah"
+         * 6. ELSE IF: jika gajiPerBulan >= 2000000, tampilkan "Ditolak: gaji tidak mencukupi untuk nominal tersebut"
+         * 7. ELSE: tampilkan "Ditolak: gaji di bawah batas minimum"
+         * 8. tampilkan ringkasan data pemohon
+         */
+
+        let gajiPerBulan = 5000000;
+        let jumlahPinjaman = 20000000;
+        let skorKredit = 720;
+        let sudahPunyaUtang = false;
+
+        // IF1: cek gaji minimum
+        if(gajiPerBulan >= 3000000) {
+            console.log("Gaji memenuhi syarat minimum.");
+
+            // IF2: cek skor kredit
+            if(skorKredit >= 700) {
+
+                // IF3: cek utang aktif
+                if(!sudahPunyaUtang) {
+                    console.log("[DITERIMA] Pinjaman disetujui.");
+                } else {
+                    console.log("[DITOLAK] Masih memiliki utang aktif.");
+                }
+
+            } else if(skorKredit >= 500) {
+                console.log("[DITERIMA] Pinjaman disetujui dengan bunga lebih tinggi (skor kredit cukup).");
+            } else {
+                console.log("[DITOLAK] Skor kredit terlalu rendah.");
+            }
+
+        } else if(gajiPerBulan >= 2000000) {
+            console.log("[DITOLAK] Gaji tidak mencukupi untuk nominal pinjaman tersebut.");
+        } else {
+            console.log("[DITOLAK] Gaji di bawah batas minimum pengajuan.");
+        }
+
+        // ringkasan data pemohon
+        console.log("--- Ringkasan Data Pemohon ---");
+        console.log("Gaji per bulan     : Rp" + gajiPerBulan.toLocaleString("id-ID"));
+        console.log("Jumlah pinjaman    : Rp" + jumlahPinjaman.toLocaleString("id-ID"));
+        console.log("Skor kredit        : " + skorKredit);
+        console.log("Memiliki utang aktif: " + (sudahPunyaUtang ? "Ya" : "Tidak"));
+    </script>
+</body>
+</html>
